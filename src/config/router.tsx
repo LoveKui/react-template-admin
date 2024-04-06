@@ -20,6 +20,8 @@ const AccountSettings = lazy(
 );
 const DetailPage = lazy(() => import("../pages/DetailPage"));
 
+const Map = lazy(() => import("../pages/Map"));
+
 const routes = [
   {
     path: "/",
@@ -62,6 +64,7 @@ const routes = [
                 path: "/account/center",
                 title: "个人中心",
                 element: <AccountCenter />,
+                icon: <TableOutlined />,
               },
               {
                 path: "/account/settings",
@@ -81,6 +84,10 @@ const routes = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/map",
+    element: <Map />,
   },
 ];
 

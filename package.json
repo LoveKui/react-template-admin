@@ -15,6 +15,7 @@
     "@types/react-dom": "^18.0.11",
     "antd": "^5.4.2",
     "axios": "^1.3.6",
+    "cesium": "1.113",
     "dayjs": "^1.11.7",
     "lodash": "^4.17.21",
     "rc-resize-observer": "^1.3.1",

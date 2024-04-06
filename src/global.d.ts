@@ -19,3 +19,11 @@ declare module "*.gif";
 declare module "*.bmp";
 declare module "*.tiff";
 declare module "faker";
+
+
+interface Window {
+  viewer: unknown;
+  Cesium: unknown;
+  map: unknown;
+  CESIUM_BASE_URL: string;
+}
