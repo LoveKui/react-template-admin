@@ -24,5 +24,23 @@ export default defineConfig({
       },
     },
   },
+  server: {
+
+    cors: false,
+    proxy: {
+      "/mapdata": {
+        target: "http://preview.wellchy.tech:8091", //跨域地址
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
+      },
+      "/terrain": {
+        target: " http://data.mars3d.cn", //跨域地址
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/api/, ""), //重写路径,替换/api
+      }
+
+
+    },
+  }
 
 });

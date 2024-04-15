@@ -3,7 +3,7 @@
  * @Author: duk
  * @Date: 2023-12-28 14:05:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-06 10:45:16
+ * @LastEditTime: 2024-04-15 21:26:13
  */
 import React, { useEffect, useRef } from "react";
 // import * as map3dduk from "map3dduk";
@@ -55,7 +55,7 @@ const Index: React.FC<Props> = () => {
             type: map3dduk.LayerType.tdt,
             layer: "vec_d",
             imageryThemeGL: {
-              enabled: true,
+              enabled: false,
             },
           },
           {
@@ -88,19 +88,66 @@ const Index: React.FC<Props> = () => {
 
       // map.addLayer(tdtLayer);
 
+      const polygonArry = [
+        91.47543905, 29.75871711, 91.47549227, 29.75873066, 91.47546198,
+        29.7588471, 91.47562516, 29.75888194, 91.47595285, 29.75892367,
+        91.47596455, 29.75889448, 91.47602279, 29.75890846, 91.47603876,
+        29.75885689, 91.47576179, 29.75879843, 91.47577096, 29.75876455,
+        91.47580068, 29.75876833, 91.47582948, 29.75868045, 91.47587327,
+        29.75868737, 91.47589626, 29.75861984, 91.47581659, 29.75860127,
+        91.47582266, 29.75857874, 91.47559753, 29.75852484, 91.47558676,
+        29.75855037, 91.4754912, 29.75852845, 91.47543905, 29.75871711,
+      ];
+
+      const polygon333 = new Cesium.PolygonGeometry({
+        polygonHierarchy: new Cesium.PolygonHierarchy(
+          Cesium.Cartesian3.fromDegreesArray(polygonArry)
+        ),
+        height: 4250.94,
+        // 设置面的拉伸高度
+        extrudedHeight: 4490.94,
+      });
+      debugger;
+      const geometry = Cesium.PolygonGeometry.createGeometry(polygon333);
+
+      const instances = new Cesium.GeometryInstance({
+        geometry: geometry,
+        attributes: {
+          color: Cesium.ColorGeometryInstanceAttribute.fromColor(
+            Cesium.Color.fromCssColorString("red").withAlpha(1) //设置高亮颜色
+          ),
+          show: new Cesium.ShowGeometryInstanceAttribute(true), //设置初始化后是否显示
+        },
+        // id: properties?.thisFloor,
+        // id: properties,
+      });
+
+      console.log("加上了");
+
+      const primitive = new Cesium.ClassificationPrimitive({
+        geometryInstances: instances,
+        //classificationType: Cesium.ClassificationType.CESIUM_3D_TILE, //只绘制在3dtiles上
+        asynchronous: false,
+      });
+
+      const www = new Cesium.PrimitiveCollection();
+      www.add(primitive);
+      map.viewer.scene.primitives.add(www);
+
       const tilesetLayer = new map3dduk.layer.TilesetLayer({
-        url: "/mapdata/3dtiles/pujiangxian/01/tileset.json",
-        // position: {
-        //   alt:5
-        // }
+        url: "/mapdata/3dtiles/gds-3dtile/tileset.json",
+        position: {
+          alt: 0,
+        },
+        flyTo: true,
       });
 
       map.addLayer(tilesetLayer);
       tilesetLayer.show = true;
 
-      tilesetLayer.on(map3dduk.EventType.load, () => {
-        tilesetLayer.flyTo();
-      });
+      // tilesetLayer.on(map3dduk.EventType.load, () => {
+      //   tilesetLayer.flyTo();
+      // });
 
       // map.addLayer(
       //   new map3dduk.layer.TdtLayer({
