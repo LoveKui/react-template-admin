@@ -18,6 +18,8 @@ import { Button, Divider, message, Space, Tabs } from "antd";
 import type { CSSProperties } from "react";
 import { useLoginStore } from "@stores/index";
 
+import * as userAPI from "@services/user/api";
+
 type LoginType = "phone" | "account";
 
 const iconStyles: CSSProperties = {
@@ -33,14 +35,26 @@ function delay(ms: number) {
 
 const Login = () => {
   const [loginType, setLoginType] = useState<LoginType>("account");
-  const { setUserInfo } = useLoginStore();
+  const { setUserInfo, setToken } = useLoginStore();
   const navigate = useNavigate();
   const onFinish = (values: any) => {
-    return delay(1000).then(() => {
-      message.success("登录成功🎉🎉🎉");
-      setUserInfo(values);
-      navigate("/", { replace: true });
-    });
+    return userAPI
+      .login(values?.username, values?.password)
+      .then(async (res) => {
+        setToken(res?.data);
+        const { data } = await userAPI.getLoginUser();
+        if (data.principal.user) {
+          const user = data.principal.user;
+          user.initAuthorities = data.principal.initAuthorities;
+          setUserInfo({
+            userInfo: user,
+          });
+          message.success("登录成功🎉🎉🎉");
+          navigate("/", { replace: true });
+        } else {
+          navigate("/login", { replace: true });
+        }
+      });
   };
   return (
     <div
