@@ -16,9 +16,9 @@ import {
 } from "@ant-design/pro-components";
 import { Button, Divider, message, Space, Tabs } from "antd";
 import type { CSSProperties } from "react";
-import { useLoginStore } from "@stores/index";
+import { useLoginStore, useGlobalStore } from "@/stores/index";
 
-import * as userAPI from "@services/user/api";
+import * as userAPI from "@/services/user/api";
 
 type LoginType = "phone" | "account";
 
@@ -36,6 +36,7 @@ function delay(ms: number) {
 const Login = () => {
   const [loginType, setLoginType] = useState<LoginType>("account");
   const { setUserInfo, setToken } = useLoginStore();
+  const { setOauth } = useGlobalStore();
   const navigate = useNavigate();
   const onFinish = (values: any) => {
     return userAPI
@@ -46,11 +47,12 @@ const Login = () => {
         if (data.principal.user) {
           const user = data.principal.user;
           user.initAuthorities = data.principal.initAuthorities;
-          setUserInfo({
-            userInfo: user,
-          });
+          setUserInfo(user);
+          setOauth(user);
           message.success("登录成功🎉🎉🎉");
-          navigate("/", { replace: true });
+          const urlParams = new URL(window.location.href).searchParams;
+
+          navigate(urlParams.get("redirect") || "/", { replace: true });
         } else {
           navigate("/login", { replace: true });
         }

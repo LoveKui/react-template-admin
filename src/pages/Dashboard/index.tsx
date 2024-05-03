@@ -5,7 +5,7 @@ import DemoColumn from "./components/DemoColumn";
 import DemoPie from "./components/DemoPie";
 import DemoLine from "./components/DemoLine";
 
-import { useUseData } from "@stores/index";
+import { useUseData } from "@/stores/index";
 
 const Dashboard: React.FC = () => {
   const userInfo = useUseData((state) => state);

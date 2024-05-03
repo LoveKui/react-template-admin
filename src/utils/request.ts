@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 import { message, notification } from "antd";
 import { userInfoUtils } from "./common";
-import { useLoginStore } from "@stores/index";
+import { useLoginStore } from "@/stores/index";
 
 interface IRequestOptions {
   url: string;
@@ -17,6 +17,17 @@ interface IResponse<T = any> {
   message: string;
   data: T;
 }
+
+
+
+export const transformZh = (error: string) => {
+  if (error?.includes('Bad credentials')) {
+    return '用户名或密码错误';
+  } else if (error?.includes('locked')) {
+    return '当前用户已经被锁定不能登录,请联系管理员';
+  }
+  return error;
+};
 
 class HttpClient {
   private readonly instance: AxiosInstance;
@@ -37,6 +48,8 @@ class HttpClient {
     const a = useLoginStore.getState().token;
     console.log("token", a);
     const token = userInfoUtils.getToken();
+
+
 
     let headers = {} as InternalAxiosRequestConfig["headers"] as any;
     if (requestConfig.url?.includes("/oauth/token")) {
@@ -63,7 +76,15 @@ class HttpClient {
     return response;
   }
   private handleErrorResponse(error: any): Promise<never> {
-    message.error(error.message || "请求失败");
+    // message.error(error.message || "请求失败");
+
+    const data = error?.response?.data;
+
+    notification.open({
+      description: `${transformZh(data?.error_description) || data?.data}` || "请求失败！",
+      message: "请求错误",
+      type: "error",
+    });
     return Promise.reject(error);
   }
   public async request<T = any>(
@@ -75,12 +96,12 @@ class HttpClient {
       ...options,
     });
 
-    const data = response.data || ({} as any);
+    const data = response?.data || ({} as any);
 
     if (data?.code) {
       if (data?.code !== 200 && data?.msg !== "success") {
         notification.open({
-          description: `${data?.data}` || "请求失败！",
+          description: `${transformZh(data?.error_description) || data?.data}` || "请求失败！",
           message: "请求错误",
           type: "error",
         });
@@ -89,14 +110,21 @@ class HttpClient {
           message: data.msg,
           data: response.data,
         };
+      } else if (data?.code === 401) {
+        userInfoUtils.setUserInfo(null);
+        userInfoUtils.setToken(null);
       }
+
+
     }
+
 
     return {
       code: response.status,
       message: response.statusText,
-      data: response.data,
+      data: data?.data || data || response,
     };
+
   }
 }
 

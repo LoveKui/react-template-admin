@@ -10,9 +10,9 @@ import {
 import { MenuProps, Space } from "antd";
 import { Layout, Menu, theme, Spin } from "antd";
 import HeaderComp from "./components/Header";
-import { useLoginStore } from "@stores/index";
+import { useLoginStore } from "@/stores/index";
 import { routes } from "../config/router";
-import NoAuthPage from "@components/NoAuthPage";
+import NoAuthPage from "../pages/403";
 import "antd/dist/reset.css";
 
 type RouteType = NonIndexRouteObject & {
@@ -26,7 +26,7 @@ const BasicLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { userInfo } = useLoginStore();
+  const { userInfo, token } = useLoginStore();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -55,7 +55,7 @@ const BasicLayout: React.FC = () => {
     navigate(key);
   };
 
-  if (!userInfo) {
+  if (!userInfo || !token) {
     return <Navigate to="/login" replace={true} />;
   }
 

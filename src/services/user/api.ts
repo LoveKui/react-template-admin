@@ -5,7 +5,7 @@
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2024-04-23 17:03:35
  */
-import http from "@utils/request";
+import http from "@/utils/request";
 import { AxiosRequestConfig } from "axios";
 
 /**

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import * as userAPI from "@services/user/api";
+import * as userAPI from "@/services/user/api";
 
 interface UserState {
   fetch: () => void;

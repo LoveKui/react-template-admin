@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-import ErrorPage from "@components/ErrorPage";
+import ErrorPage from "@/pages/500";
 import LoginPage from "../layout/components/Login";
 import App, { authLoader } from "../App";
 import { createBrowserRouter, Navigate } from "react-router-dom";
@@ -18,6 +18,16 @@ const AccountCenter = lazy(() => import("../pages/AccountPage/AccountCenter"));
 const AccountSettings = lazy(
   () => import("../pages/AccountPage/AccountSettings")
 );
+
+const UserPage = lazy(() => import("../pages/System/Admin/User"));
+const PermissionPage = lazy(() => import("../pages/System/Admin/Permission"));
+const RolePage = lazy(() => import("../pages/System/Admin/Role"));
+const DepartmentPage = lazy(() => import("../pages/System/Admin/Department"));
+const LoginLogPage = lazy(() => import("../pages/System/Monitor/Log"));
+const OperateLogPage = lazy(
+  () => import("../pages/System/Monitor/Log/OperateLog")
+);
+
 const DetailPage = lazy(() => import("../pages/DetailPage"));
 
 const Map = lazy(() => import("../pages/Map"));
@@ -55,6 +65,58 @@ const routes = [
             icon: <BarsOutlined />,
             element: <DetailPage />,
           },
+          {
+            path: "system",
+            title: "系统管理",
+            icon: <BarsOutlined />,
+            children: [
+              {
+                path: "/system/user",
+                title: "用户管理",
+                element: <UserPage />,
+                icon: <TableOutlined />,
+              },
+              {
+                path: "/system/permission",
+                title: "权限管理",
+                element: <PermissionPage />,
+                icon: <TableOutlined />,
+              },
+              {
+                path: "/system/role",
+                title: "角色管理",
+                element: <RolePage />,
+                icon: <TableOutlined />,
+              },
+              {
+                path: "/system/department",
+                title: "部门管理",
+                element: <DepartmentPage />,
+                icon: <TableOutlined />,
+              },
+            ],
+          },
+          {
+            path: "monitor",
+            title: "系统监控",
+            icon: <BarsOutlined />,
+
+            children: [
+              {
+                path: "/monitor/log",
+                title: "操作日志",
+                element: <OperateLogPage />,
+                icon: <TableOutlined />,
+              },
+              {
+                path: "/monitor/loginLog",
+                title: "登录日志",
+                element: <LoginLogPage />,
+                icon: <TableOutlined />,
+              },
+            ],
+          },
+
           {
             path: "account",
             title: "个人页",

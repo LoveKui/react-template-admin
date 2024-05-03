@@ -1,10 +1,12 @@
 import React, { Suspense, lazy } from "react";
 import { ConfigProvider, Spin } from "antd";
-import { useGlobalStore } from "@stores/index";
+import { useGlobalStore } from "@/stores/index";
 import zhCN from "antd/locale/zh_CN";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import "antd/dist/reset.css";
+
+import { accessProvider as AccessProvider } from "@/components/Access/runtime"; // 假设你的 AccessProvider 文件路径在当前目录下
 
 dayjs.locale("zh-cn");
 
@@ -27,7 +29,9 @@ const App: React.FC = () => {
       }}
     >
       <Suspense fallback={<Spin size="large" className="globa_spin" />}>
-        <BasicLayout />
+        <AccessProvider>
+          <BasicLayout />
+        </AccessProvider>
       </Suspense>
     </ConfigProvider>
   );

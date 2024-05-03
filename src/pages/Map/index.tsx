@@ -3,7 +3,7 @@
  * @Author: duk
  * @Date: 2023-12-28 14:05:57
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-15 21:26:13
+ * @LastEditTime: 2024-05-03 22:03:38
  */
 import React, { useEffect, useRef } from "react";
 // import * as map3dduk from "map3dduk";
@@ -68,6 +68,18 @@ const Index: React.FC<Props> = () => {
       map.addControl(new map3dduk.control.LocationBar());
       map.addControl(new map3dduk.control.SwitchMode());
       map.addControl(new map3dduk.control.EagleEyeMap());
+
+      // 监听场景的tilesLoaded事件
+      map.viewer.scene.globe.tileLoadProgressEvent.addEventListener(
+        function () {
+          // 检查地球是否加载完成
+          if (map.viewer.scene.globe.tilesLoaded === true) {
+            // 地球加载完成后执行的操作
+            console.log("地球加载完成！");
+            // 在此处执行你想要的操作，比如隐藏loading提示
+          }
+        }
+      );
 
       // const swipe = new map3dduk.control.Swipe({});
 
