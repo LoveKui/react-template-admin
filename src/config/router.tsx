@@ -9,6 +9,13 @@ import {
   TableOutlined,
   BarsOutlined,
   UserOutlined,
+  SettingOutlined,
+  LockOutlined,
+  UserSwitchOutlined,
+  UsergroupAddOutlined,
+  FundProjectionScreenOutlined,
+  FileDoneOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 
 const Dashboard = lazy(() => import("../pages/Dashboard"));
@@ -68,51 +75,51 @@ const routes = [
           {
             path: "system",
             title: "系统管理",
-            icon: <BarsOutlined />,
+            icon: <SettingOutlined />,
             children: [
               {
                 path: "/system/user",
                 title: "用户管理",
                 element: <UserPage />,
-                icon: <TableOutlined />,
+                icon: <UserOutlined />,
               },
               {
                 path: "/system/permission",
                 title: "权限管理",
                 element: <PermissionPage />,
-                icon: <TableOutlined />,
+                icon: <LockOutlined />,
               },
               {
                 path: "/system/role",
                 title: "角色管理",
                 element: <RolePage />,
-                icon: <TableOutlined />,
+                icon: <UserSwitchOutlined />,
               },
               {
                 path: "/system/department",
                 title: "部门管理",
                 element: <DepartmentPage />,
-                icon: <TableOutlined />,
+                icon: <UsergroupAddOutlined />,
               },
             ],
           },
           {
             path: "monitor",
             title: "系统监控",
-            icon: <BarsOutlined />,
+            icon: <FundProjectionScreenOutlined />,
 
             children: [
               {
                 path: "/monitor/log",
                 title: "操作日志",
                 element: <OperateLogPage />,
-                icon: <TableOutlined />,
+                icon: <FileDoneOutlined />,
               },
               {
                 path: "/monitor/loginLog",
                 title: "登录日志",
                 element: <LoginLogPage />,
-                icon: <TableOutlined />,
+                icon: <FileTextOutlined />,
               },
             ],
           },

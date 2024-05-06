@@ -67,9 +67,14 @@ const Login = () => {
     >
       <LoginFormPage
         backgroundImageUrl="https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png"
+        backgroundVideoUrl="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/jXRBRK_VAwoAAAAAAAAAAAAAK4eUAQBr"
         onFinish={onFinish as any}
         title="react-template-admin"
         subTitle="一个轻量级react后台管理系统"
+        // containerStyle={{
+        //   backgroundColor: "rgba(0, 0, 0,0.65)",
+        //   backdropFilter: "blur(4px)",
+        // }}
         activityConfig={{
           style: {
             boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.2)",
