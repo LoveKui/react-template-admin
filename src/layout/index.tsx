@@ -7,7 +7,7 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { MenuProps, Space } from "antd";
+import { Col, MenuProps, Row, Space } from "antd";
 import { Layout, Menu, theme, Spin } from "antd";
 import HeaderComp from "./components/Header";
 import { useLoginStore } from "@/stores/index";
@@ -15,6 +15,7 @@ import { routes } from "../config/router";
 import NoAuthPage from "../pages/403";
 import "antd/dist/reset.css";
 import { useAccess } from "@/components/Access";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
 type RouteType = NonIndexRouteObject & {
   title: string;
@@ -126,9 +127,8 @@ const BasicLayout: React.FC = () => {
           overflow: "auto",
           height: "100vh",
         }}
-        collapsible
+        collapsible={false}
         collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
       >
         <div
           style={{
@@ -142,14 +142,32 @@ const BasicLayout: React.FC = () => {
           defaultSelectedKeys={[pathname]}
           defaultOpenKeys={renderOpenKeys()}
           mode="inline"
-          data-item={menuItems}
           items={menuItems}
           onClick={onMenuClick}
         />
       </Sider>
       <Layout className="site-layout">
         <Header style={{ padding: "0 10px", background: colorBgContainer }}>
-          <HeaderComp />
+          <Row gutter={24}>
+            <Col span={1}>
+              {" "}
+              {collapsed ? (
+                <MenuUnfoldOutlined
+                  style={{ fontSize: 20 }}
+                  onClick={() => setCollapsed(false)}
+                />
+              ) : (
+                <MenuFoldOutlined
+                  style={{ fontSize: 20 }}
+                  onClick={() => setCollapsed(true)}
+                />
+              )}
+            </Col>
+            <Col span={23}>
+              {" "}
+              <HeaderComp />
+            </Col>
+          </Row>
         </Header>
         {/* height：Header和Footer的默认高度是64 */}
         <Content
