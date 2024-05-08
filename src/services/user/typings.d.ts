@@ -3,7 +3,7 @@
  * @Author: duk
  * @Date: 2023-04-17 20:57:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-04-23 16:52:57
+ * @LastEditTime: 2024-05-08 16:26:10
  */
 // @ts-ignore
 /* eslint-disable */
@@ -44,10 +44,8 @@ declare namespace User {
     data: Item[];
   }
   interface ResPage extends Common.Results {
-    data: {
-      list: Item[];
-      count: number;
-    };
+    list: Item[];
+    count: number;
   }
 
   interface Add {

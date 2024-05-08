@@ -3,7 +3,7 @@
  * @Author: duk
  * @Date: 2023-04-17 20:57:59
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2024-05-08 15:32:49
+ * @LastEditTime: 2024-05-08 16:27:15
  */
 // @ts-ignore
 /* eslint-disable */
@@ -24,9 +24,6 @@ declare namespace Role {
     data: Item[];
   }
   interface ResPage extends Common.Results {
-    // data: {
-
-    // };
     list: Item[];
     count: number;
   }

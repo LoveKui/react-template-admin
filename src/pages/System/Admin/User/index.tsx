@@ -348,7 +348,6 @@ const TableList: React.FC = () => {
       pageSize: pageSize || 20,
       ...newParams,
     });
-    debugger;
     return {
       data: res?.data?.list,
       success: true,
