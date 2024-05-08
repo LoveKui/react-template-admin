@@ -77,7 +77,11 @@ const RightContent: React.FC = () => {
             src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
             style={{ cursor: "pointer" }}
           />
-          <div>{userInfo?.nickname}</div>
+          <span>{userInfo?.nickname}</span>
+          {/* <span>
+          <span>{userInfo?.username}</span>
+            
+          </span> */}
         </Space>
       </Dropdown>
     </Space>

@@ -166,7 +166,7 @@ const TableList: React.FC = () => {
       },
 
       fieldProps: {
-        showArrow: false,
+        suffixIcon: false,
         filterTreeNode: true,
         showSearch: true,
         autoClearSearchValue: true,
@@ -259,10 +259,12 @@ const TableList: React.FC = () => {
             {record?.roles?.map((el) => (
               <Tooltip
                 key={el}
-                title={data?.list?.find((k) => k.name === el)?.description}
+                title={
+                  data?.data?.list?.find((k) => k.name === el)?.description
+                }
               >
                 <Tag color="#108ee9">
-                  {data?.list?.find((k) => k.name === el)?.description}
+                  {data?.data?.list?.find((k) => k.name === el)?.description}
                 </Tag>
               </Tooltip>
             ))}
@@ -338,7 +340,7 @@ const TableList: React.FC = () => {
   ];
 
   const getOsAllList = async (param: API.PageParams) => {
-    let { current, pageSize, ...newParams } = param;
+    const { current, pageSize, ...newParams } = param;
     console.log("newParams", newParams);
 
     const res = await userAPI.getUserList({
@@ -355,7 +357,7 @@ const TableList: React.FC = () => {
   };
 
   return (
-    <PageContainer>
+    <PageContainer style={{ padding: 0, paddingInline: 0 }}>
       <ProTable<User.Item, API.PageParams>
         headerTitle={"查询表格"}
         actionRef={actionRef}
@@ -416,7 +418,7 @@ const TableList: React.FC = () => {
       {createModalOpen && (
         <ItemModal
           department={treeData}
-          roles={data?.list || []}
+          roles={data?.data?.list || []}
           item={currentRow}
           open={createModalOpen}
           onOk={(flag: boolean) => {

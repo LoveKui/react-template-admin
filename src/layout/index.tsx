@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useRef, useEffect } from "react";
 import {
   Outlet,
   useLoaderData,
@@ -14,16 +14,21 @@ import { useLoginStore } from "@/stores/index";
 import { routes } from "../config/router";
 import NoAuthPage from "../pages/403";
 import "antd/dist/reset.css";
+import { useAccess } from "@/components/Access";
 
 type RouteType = NonIndexRouteObject & {
   title: string;
   icon: React.ReactElement;
+  access?: string | undefined;
 };
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const BasicLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const access = useAccess();
+
+  const menusRef = useRef([] as any[]);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { userInfo, token } = useLoginStore();
@@ -32,9 +37,42 @@ const BasicLayout: React.FC = () => {
   } = theme.useToken();
   const { isAdmin } = useLoaderData() as any;
 
+  useEffect(() => {
+    const k = menusRef.current.find((l) => l.path === pathname);
+    if (k?.access === false) {
+      navigate("/403", { replace: true });
+    }
+  }, [pathname]);
+
   const getItems: any = (children: RouteType[]) => {
     return children.map((item) => {
-      return {
+      menusRef.current.push(item);
+      if (
+        (item?.access && access[item?.access]) ||
+        item?.access === undefined
+      ) {
+        return {
+          key: item.index
+            ? "/"
+            : item.path?.startsWith("/")
+            ? item.path
+            : `/${item.path}`,
+          icon: item.icon,
+          label: item.title,
+          children: item.children ? getItems(item.children) : null,
+        };
+      }
+
+      if (item?.access && access[item?.access] === false) {
+        return null;
+      }
+    });
+  };
+
+  const getAllItems: any = (children: RouteType[]) => {
+    return children.map((item) => {
+      menusRef.current.push({
+        ...item,
         key: item.index
           ? "/"
           : item.path?.startsWith("/")
@@ -42,17 +80,31 @@ const BasicLayout: React.FC = () => {
           : `/${item.path}`,
         icon: item.icon,
         label: item.title,
-        children: item.children ? getItems(item.children) : null,
-      };
+        children: item.children ? getAllItems(item.children) : null,
+        access: item?.access ? access[item?.access] : undefined,
+      });
     });
   };
+
+  getAllItems(
+    routes[0].children![0].children.filter((item) => item.path !== "*")
+  );
 
   const menuItems: MenuProps["items"] = getItems(
     routes[0].children![0].children.filter((item) => item.path !== "*")
   );
 
-  const onMenuClick: MenuProps["onClick"] = ({ key }) => {
-    navigate(key);
+  const onMenuClick: MenuProps["onClick"] = (info) => {
+    const { key } = info;
+
+    const k = menusRef.current.find((l) => l.path === key);
+    if (k?.access && access[k?.access] === false) {
+      navigate("/403");
+    } else {
+      navigate(key);
+    }
+
+    console.log(info);
   };
 
   if (!userInfo || !token) {
@@ -90,6 +142,7 @@ const BasicLayout: React.FC = () => {
           defaultSelectedKeys={[pathname]}
           defaultOpenKeys={renderOpenKeys()}
           mode="inline"
+          data-item={menuItems}
           items={menuItems}
           onClick={onMenuClick}
         />

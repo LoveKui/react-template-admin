@@ -3,6 +3,8 @@ import ErrorPage from "@/pages/500";
 import LoginPage from "../layout/components/Login";
 import App, { authLoader } from "../App";
 import { createBrowserRouter, Navigate } from "react-router-dom";
+
+import { useAccess } from "@/components/Access";
 import {
   DashboardOutlined,
   EditOutlined,
@@ -35,9 +37,13 @@ const OperateLogPage = lazy(
   () => import("../pages/System/Monitor/Log/OperateLog")
 );
 
+const Page403 = lazy(() => import("../pages/403"));
+
 const DetailPage = lazy(() => import("../pages/DetailPage"));
 
 const Map = lazy(() => import("../pages/Map"));
+
+// const access = useAccess();
 
 const routes = [
   {
@@ -76,30 +82,35 @@ const routes = [
             path: "system",
             title: "系统管理",
             icon: <SettingOutlined />,
+            access: "canSystem",
             children: [
               {
                 path: "/system/user",
                 title: "用户管理",
                 element: <UserPage />,
                 icon: <UserOutlined />,
+                access: "canUser",
               },
               {
                 path: "/system/permission",
                 title: "权限管理",
                 element: <PermissionPage />,
                 icon: <LockOutlined />,
+                access: "canPermission",
               },
               {
                 path: "/system/role",
                 title: "角色管理",
                 element: <RolePage />,
                 icon: <UserSwitchOutlined />,
+                access: "canRole",
               },
               {
                 path: "/system/department",
                 title: "部门管理",
                 element: <DepartmentPage />,
                 icon: <UsergroupAddOutlined />,
+                access: "canDepartment",
               },
             ],
           },
@@ -157,6 +168,10 @@ const routes = [
   {
     path: "/map",
     element: <Map />,
+  },
+  {
+    path: "/403",
+    element: <Page403 />,
   },
 ];
 
